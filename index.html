@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BLOODLIT TEMPLE</title>
-  <meta name="description" content="This world was not supposed to exist." />
+  <meta name="description" content="The loop wasn’t the message. The failure to advance was." />
 
   <style>
     :root{
@@ -49,7 +49,22 @@
       font-weight: 600;
       line-height: 1.2;
       margin:0;
+      max-width: 22ch;
     }
+
+    /* Embedded inscription */
+    .inscription{
+      max-width: 52ch;
+      margin: 6px 0 0;
+      color: rgba(255,255,255,.82);
+      font-size: 15px;
+      line-height: 1.6;
+      letter-spacing: .01em;
+    }
+    .inscription .line{
+      display:block;
+    }
+
     .poem{
       margin: 10px 0 0;
       padding: 18px 18px;
@@ -158,11 +173,21 @@
 <body>
   <main class="wrap">
 
+    <!--
+      The loop wasn’t the message.
+      The failure to advance was.
+    -->
+
     <!-- HERO / ENTRY -->
     <section class="hero" id="top">
       <p class="kicker">BLOODLIT TEMPLE</p>
 
       <h1 class="headline">This world was not supposed to exist.</h1>
+
+      <p class="inscription" aria-label="Inscription">
+        <span class="line">The loop wasn’t the message.</span>
+        <span class="line">The failure to advance was.</span>
+      </p>
 
       <div class="poem">
         <pre>
@@ -178,14 +203,13 @@ And cannot be erased no more
       </div>
 
       <div class="actions">
-        <!-- Replace VIDEO_URL with your full YouTube watch URL -->
         <a class="btn" href="https://www.youtube.com/watch?v=xmK9LU9Qi3Y" target="_blank" rel="noopener">ENTER</a>
 
-        <!-- Replace your email -->
         <a class="link" href="mailto:bloodlittemple@pm.me">bloodlittemple@pm.me</a>
 
-        <!-- Optional: link to channel -->
         <a class="link" href="https://youtube.com/@bloodlittemple" target="_blank" rel="noopener">YouTube</a>
+
+        <a class="link" href="https://www.instagram.com/th.renyx404/" target="_blank" rel="noopener">Instagram</a>
       </div>
     </section>
 
@@ -194,7 +218,6 @@ And cannot be erased no more
       <h2>WORLD: INITIALIZING</h2>
 
       <div class="video">
-        <!-- Replace VIDEO_ID with the YouTube ID (watch?v=xmK9LU9Qi3Y) -->
         <iframe
           src="https://www.youtube.com/embed/xmK9LU9Qi3Y?rel=0&modestbranding=1"
           title="Visualizer"
@@ -212,16 +235,4 @@ And cannot be erased no more
       <img class="img" src="girl.jpg" alt="Bloodlit figure" />
 
       <div class="caption">
-        <!-- Optional caption (keep or delete) -->
-        <span>Signal meets Archive. A third world compiles.</span>
-      </div>
-    </section>
-
-    <footer>
-      <div>© BLOODLIT</div>
-      <div><a class="link" href="#top">Back to top</a></div>
-    </footer>
-
-  </main>
-</body>
-</html>
+        <span>Signal meets Archive. A third world compiles.</spa
