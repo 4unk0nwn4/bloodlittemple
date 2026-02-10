@@ -2,44 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BLOODLIT TEMPLE</title>
-  <meta name="description" content="misfit n0t br0kn. dont fit. follow ✂" />
+
   <style>
-    :root { --bg:#000; --fg:#fff; --muted:rgba(255,255,255,.72); }
-    html, body { height:100%; }
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--fg);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
-    .wrap{
-      width:min(920px, 92vw);
-      text-align:center;
-      padding:24px 0;
+
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
     }
-    img{
-      width:min(520px, 92vw);
-      height:auto;
-      display:block;
-      margin:0 auto 18px;
+
+    .title {
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      opacity: 0.85;
     }
-    .line{
-      font-size:18px;
-      letter-spacing:.04em;
-      color:var(--muted);
-      user-select:none;
+
+    .status {
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    .cursor::after {
+      content: "▍";
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
     }
   </style>
 </head>
+
 <body>
-  <main class="wrap">
-    <img src="cvttrgrl_pixel.jpg" alt="cvttrgrl_pixel" />
-    <div class="line">don’t fit. follow ✂</div>
-  </main>
+  <div class="container">
+    <div class="title">BLOODLIT TEMPLE</div>
+    <div class="status cursor">system initializing</div>
+  </div>
 </body>
-</html>
