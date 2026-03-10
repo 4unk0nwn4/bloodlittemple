@@ -312,7 +312,7 @@
   <!-- MAIN CONTENT -->
   <main id="main-content">
     <section class="hero">
-      <img src="girl.jpeg" alt="Temple emergence image" />
+      <img src="girl.jpg" alt="Temple emergence image" />
       <div class="hero-caption">system entry confirmed</div>
     </section>
 
@@ -320,7 +320,7 @@
       <div class="video-wrap">
         <!-- Replace the VIDEO_ID below with your YouTube video's ID -->
         <iframe
-          src="https://www.youtube.com/watch?v=xmK9LU9Qi3Y"
+          src="https://youtu.be/xmK9LU9Qi3Y?si=f4-MqS2tccfIiatx"
           title="Temple transmission"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen>
