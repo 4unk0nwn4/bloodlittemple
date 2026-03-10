@@ -1,56 +1,439 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BLOODLIT TEMPLE</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bloodlit Temple</title>
   <style>
+    :root {
+      --bg: #050505;
+      --panel: #0b0b0b;
+      --text: #d8d8d8;
+      --muted: #8a8a8a;
+      --accent: #b8c7ff;
+      --line: rgba(255,255,255,0.08);
+      --shadow: rgba(0,0,0,0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Courier New", Courier, monospace;
+      min-height: 100%;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* BOOT SCREEN */
+    #boot-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
       background: #000;
-      color: #fff;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-
-    .container {
-      height: 100%;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      text-align: center;
-      gap: 12px;
+      justify-content: center;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
     }
 
-    .title {
-      letter-spacing: 0.12em;
-      font-size: 12px;
-      opacity: 0.85;
+    #boot-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
-    .status {
-      font-size: 11px;
-      opacity: 0.6;
+    .boot-inner {
+      width: min(90vw, 560px);
+      padding: 2rem;
+      text-align: left;
     }
 
-    .cursor::after {
-      content: "▍";
-      animation: blink 1.2s infinite;
+    .boot-title {
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #f0f0f0;
+      margin-bottom: 1rem;
+    }
+
+    .boot-line {
+      font-size: 1rem;
+      color: #cfcfcf;
+      white-space: nowrap;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 0.65ch;
+      animation: blink 0.85s steps(1) infinite;
     }
 
     @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* MAIN */
+    #main-content {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 1.4s ease, transform 1.4s ease;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+      background: #02050a;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.65)),
+        radial-gradient(circle at center, rgba(150,180,255,0.12), transparent 48%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero img {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: saturate(0.9) brightness(0.88);
+    }
+
+    .hero-caption {
+      position: absolute;
+      z-index: 2;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(90vw, 980px);
+      color: rgba(255,255,255,0.88);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .section {
+      width: min(92vw, 900px);
+      margin: 0 auto;
+      padding: 4rem 0;
+    }
+
+    .video-wrap {
+      border: 1px solid var(--line);
+      background: #000;
+      box-shadow: 0 18px 50px var(--shadow);
+    }
+
+    .video-wrap iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      border: 0;
+    }
+
+    .archive-entry {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+
+    .entry-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .entry-title {
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      margin: 0 0 2rem 0;
+      color: #f2f2f2;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .entry-text {
+      font-size: clamp(1rem, 1.2vw, 1.1rem);
+      line-height: 1.95;
+      color: #d0d0d0;
+      max-width: 720px;
+      white-space: pre-line;
+    }
+
+    .artefact-line {
+      margin-top: 2rem;
+      font-size: 0.92rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .artefact-link {
+      border-bottom: 1px solid rgba(184, 199, 255, 0.45);
+      padding-bottom: 2px;
+    }
+
+    footer {
+      width: min(92vw, 900px);
+      margin: 0 auto;
+      padding: 0 0 4rem 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.86);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      position: relative;
+      width: min(92vw, 760px);
+      max-height: 90vh;
+      background: #080808;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+      padding: 1rem;
+    }
+
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.7rem;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+      font: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 700px) {
+      .boot-inner {
+        padding: 1.2rem;
+      }
+
+      .boot-title {
+        font-size: 0.82rem;
+      }
+
+      .boot-line {
+        font-size: 0.95rem;
+      }
+
+      .hero-caption {
+        bottom: 1.2rem;
+        font-size: 0.68rem;
+      }
+
+      .section {
+        padding: 2.6rem 0;
+      }
+
+      .entry-text {
+        line-height: 1.8;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="title">BLOODLIT TEMPLE</div>
-    <div class="status cursor">system initializing</div>
+
+  <!-- BOOT / INITIALIZING SCREEN -->
+  <div id="boot-screen" aria-hidden="true">
+    <div class="boot-inner">
+      <div class="boot-title">Bloodlit Temple</div>
+      <div class="boot-line">
+        <span id="typed-text"></span><span class="cursor">|</span>
+      </div>
+    </div>
   </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+    <section class="hero">
+      <img src="girl.jpeg" alt="Temple emergence image" />
+      <div class="hero-caption">system entry confirmed</div>
+    </section>
+
+    <section class="section">
+      <div class="video-wrap">
+        <!-- Replace the VIDEO_ID below with your YouTube video's ID -->
+        <iframe
+          src="https://www.youtube.com/watch?v=xmK9LU9Qi3Y"
+          title="Temple transmission"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </section>
+
+    <section class="section archive-entry">
+      <div class="entry-label">Temple Archive</div>
+      <h1 class="entry-title">Entry 000</h1>
+
+      <div class="entry-text">This archive does not begin with an origin story.
+
+No founding date has been confirmed.
+No authority has been identified.
+
+The structure appears to have formed gradually
+around a series of observations:
+
+that certain experiences cannot be named
+without altering them,
+
+that certain signals arrive
+before language can stabilize them,
+
+and that some realizations
+reorganize the structure of a life quietly.
+
+This archive exists to record those moments.
+
+Not to explain them.
+Not to resolve them.
+
+Only to keep the record intact.
+
+Proceed carefully.
+
+The atmosphere inside may differ
+from the one you arrived with.</div>
+
+      <div class="artefact-line">
+        <a href="#" class="artefact-link" id="artefact-trigger">artefact 001</a>
+      </div>
+    </section>
+
+    <footer>
+      bloodlit temple / archive active
+    </footer>
+  </main>
+
+  <!-- ARTEFACT MODAL -->
+  <div class="modal" id="artefact-modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close" aria-label="Close artefact">close</button>
+      <!-- Put your attached image in the repo and change the filename if needed -->
+      <img src="artefact001.png" alt="Artefact 001" />
+    </div>
+  </div>
+
+  <script>
+    const bootScreen = document.getElementById("boot-screen");
+    const mainContent = document.getElementById("main-content");
+    const typedText = document.getElementById("typed-text");
+
+    const bootMessage = "system initializing...";
+    let i = 0;
+
+    function typeBootText() {
+      if (i < bootMessage.length) {
+        typedText.textContent += bootMessage.charAt(i);
+        i++;
+        setTimeout(typeBootText, 70);
+      } else {
+        setTimeout(() => {
+          bootScreen.classList.add("hidden");
+          mainContent.classList.add("visible");
+        }, 1200);
+      }
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(typeBootText, 500);
+    });
+
+    // Artefact modal
+    const artefactTrigger = document.getElementById("artefact-trigger");
+    const artefactModal = document.getElementById("artefact-modal");
+    const modalClose = document.getElementById("modal-close");
+
+    artefactTrigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      artefactModal.classList.add("open");
+      artefactModal.setAttribute("aria-hidden", "false");
+    });
+
+    function closeModal() {
+      artefactModal.classList.remove("open");
+      artefactModal.setAttribute("aria-hidden", "true");
+    }
+
+    modalClose.addEventListener("click", closeModal);
+
+    artefactModal.addEventListener("click", (e) => {
+      if (e.target === artefactModal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && artefactModal.classList.contains("open")) {
+        closeModal();
+      }
+    });
+  </script>
 </body>
+</html>
