@@ -15,9 +15,7 @@
       --shadow: rgba(0,0,0,0.45);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -28,20 +26,15 @@
       min-height: 100%;
     }
 
-    body {
-      overflow-x: hidden;
-    }
+    body { overflow-x: hidden; }
 
     a {
       color: var(--accent);
       text-decoration: none;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
+    a:hover { text-decoration: underline; }
 
-    /* BOOT SCREEN */
     #boot-screen {
       position: fixed;
       inset: 0;
@@ -86,12 +79,9 @@
     }
 
     @keyframes blink {
-      50% {
-        opacity: 0;
-      }
+      50% { opacity: 0; }
     }
 
-    /* MAIN */
     #main-content {
       opacity: 0;
       transform: translateY(8px);
@@ -220,7 +210,6 @@
       text-transform: uppercase;
     }
 
-    /* MODAL */
     .modal {
       position: fixed;
       inset: 0;
@@ -232,9 +221,7 @@
       padding: 2rem;
     }
 
-    .modal.open {
-      display: flex;
-    }
+    .modal.open { display: flex; }
 
     .modal-content {
       position: relative;
@@ -268,38 +255,10 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
-    @media (max-width: 700px) {
-      .boot-inner {
-        padding: 1.2rem;
-      }
-
-      .boot-title {
-        font-size: 0.82rem;
-      }
-
-      .boot-line {
-        font-size: 0.95rem;
-      }
-
-      .hero-caption {
-        bottom: 1.2rem;
-        font-size: 0.68rem;
-      }
-
-      .section {
-        padding: 2.6rem 0;
-      }
-
-      .entry-text {
-        line-height: 1.8;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- BOOT / INITIALIZING SCREEN -->
   <div id="boot-screen" aria-hidden="true">
     <div class="boot-inner">
       <div class="boot-title">Bloodlit Temple</div>
@@ -309,7 +268,6 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
   <main id="main-content">
     <section class="hero">
       <img src="girl.jpg" alt="Temple emergence image" />
@@ -318,9 +276,8 @@
 
     <section class="section">
       <div class="video-wrap">
-        <!-- Replace the VIDEO_ID below with your YouTube video's ID -->
         <iframe
-          src="https://youtu.be/xmK9LU9Qi3Y?si=f4-MqS2tccfIiatx"
+          src="https://www.youtube.com/embed/xmK9LU9Qi3Y"
           title="Temple transmission"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen>
@@ -337,17 +294,11 @@
 No founding date has been confirmed.
 No authority has been identified.
 
-The structure appears to have formed gradually
-around a series of observations:
+The structure appears to have formed gradually around a series of observations:
 
-that certain experiences cannot be named
-without altering them,
-
-that certain signals arrive
-before language can stabilize them,
-
-and that some realizations
-reorganize the structure of a life quietly.
+that certain experiences cannot be named without altering them,
+that certain signals arrive before language can stabilize them,
+and that some realizations reorganize the structure of a life quietly.
 
 This archive exists to record those moments.
 
@@ -358,24 +309,19 @@ Only to keep the record intact.
 
 Proceed carefully.
 
-The atmosphere inside may differ
-from the one you arrived with.</div>
+The atmosphere inside may differ from the one you arrived with.</div>
 
       <div class="artefact-line">
         <a href="#" class="artefact-link" id="artefact-trigger">artefact 001</a>
       </div>
     </section>
 
-    <footer>
-      bloodlit temple / archive active
-    </footer>
+    <footer>bloodlit temple / archive active</footer>
   </main>
 
-  <!-- ARTEFACT MODAL -->
   <div class="modal" id="artefact-modal" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" id="modal-close" aria-label="Close artefact">close</button>
-      <!-- Put your attached image in the repo and change the filename if needed -->
       <img src="artefact001.png" alt="Artefact 001" />
     </div>
   </div>
@@ -401,11 +347,10 @@ from the one you arrived with.</div>
       }
     }
 
-    window.addEventListener("load", () => {
+    window.addEventListener("DOMContentLoaded", () => {
       setTimeout(typeBootText, 500);
     });
 
-    // Artefact modal
     const artefactTrigger = document.getElementById("artefact-trigger");
     const artefactModal = document.getElementById("artefact-modal");
     const modalClose = document.getElementById("modal-close");
@@ -424,9 +369,7 @@ from the one you arrived with.</div>
     modalClose.addEventListener("click", closeModal);
 
     artefactModal.addEventListener("click", (e) => {
-      if (e.target === artefactModal) {
-        closeModal();
-      }
+      if (e.target === artefactModal) closeModal();
     });
 
     document.addEventListener("keydown", (e) => {
