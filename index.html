@@ -188,8 +188,15 @@
       white-space: pre-line;
     }
 
+    .artefact-row {
+      margin-top: 2.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      align-items: center;
+    }
+
     .artefact-line {
-      margin-top: 2rem;
       font-size: 0.92rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -198,6 +205,34 @@
     .artefact-link {
       border-bottom: 1px solid rgba(184, 199, 255, 0.45);
       padding-bottom: 2px;
+    }
+
+    .temple-audio-button {
+      appearance: none;
+      background: rgba(184, 199, 255, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(184, 199, 255, 0.28);
+      padding: 0.72rem 1rem;
+      font: inherit;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 0 0 rgba(184, 199, 255, 0);
+    }
+
+    .temple-audio-button:hover {
+      background: rgba(184, 199, 255, 0.12);
+      border-color: rgba(184, 199, 255, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(184, 199, 255, 0.08);
+    }
+
+    .temple-audio-button.playing {
+      background: rgba(184, 199, 255, 0.16);
+      border-color: rgba(184, 199, 255, 0.55);
+      box-shadow: 0 0 22px rgba(184, 199, 255, 0.14);
     }
 
     footer {
@@ -231,6 +266,7 @@
       border: 1px solid var(--line);
       box-shadow: 0 20px 60px rgba(0,0,0,0.65);
       padding: 1rem;
+      overflow: auto;
     }
 
     .modal-content img {
@@ -254,6 +290,27 @@
       font: inherit;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      z-index: 2;
+    }
+
+    .lyrics-modal-content {
+      padding: 3.2rem 1.4rem 1.4rem 1.4rem;
+    }
+
+    .lyrics-title {
+      margin: 0 0 1.5rem 0;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #f2f2f2;
+    }
+
+    .lyrics-text {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.9;
+      color: #d4d4d4;
+      font-size: 0.98rem;
     }
   </style>
 </head>
@@ -311,18 +368,99 @@ Proceed carefully.
 
 The atmosphere inside may differ from the one you arrived with.</div>
 
-      <div class="artefact-line">
-        <a href="#" class="artefact-link" id="artefact-trigger">artefact 001</a>
+      <div class="artefact-row">
+        <div class="artefact-line">
+          <a href="#" class="artefact-link" id="artefact-trigger">artefact 001</a>
+        </div>
+
+        <div class="artefact-line">
+          <a href="#" class="artefact-link" id="lyrics-trigger">track lyrics</a>
+        </div>
+
+        <button class="temple-audio-button" id="audio-toggle" type="button">
+          enter the temple
+        </button>
       </div>
     </section>
 
     <footer>bloodlit temple / archive active</footer>
   </main>
 
+  <audio id="temple-audio" preload="auto">
+    <source src="soundtrack.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
   <div class="modal" id="artefact-modal" aria-hidden="true">
     <div class="modal-content">
       <button class="modal-close" id="modal-close" aria-label="Close artefact">close</button>
       <img src="artefact000.png" alt="Artefact 000" />
+    </div>
+  </div>
+
+  <div class="modal" id="lyrics-modal" aria-hidden="true">
+    <div class="modal-content lyrics-modal-content">
+      <button class="modal-close" id="lyrics-close" aria-label="Close lyrics">close</button>
+      <h2 class="lyrics-title">Code-Seal / Flame</h2>
+      <pre class="lyrics-text">glitch in the current
+glitch in the red
+a door in the cavern
+a mark on the thread
+
+few ever see it
+fewer step in
+the layered world
+beneath the skin
+
+I felt the pull
+under the ground
+a signal buried
+without a sound
+
+create the node
+ignite the flame
+write the mark
+without a name
+
+constellations forming
+deep in the cave
+the wall remembers
+what blood once gave
+
+empire of resonance
+empire of breath
+not born from power
+not crowned by death
+
+empire is signal
+taking a form
+a living current
+inside the storm
+
+I will not forget
+the call in the red
+the fire that opened
+the path I tread
+
+I carry the flame
+through silence and stone
+for the ones called broken
+for the ones alone
+
+signal in silence
+hidden but true
+the cave still burning
+for the few
+
+create the node
+link the night
+keep the current
+keep the light
+
+signal is not silence
+signal is not gone
+the flame in the cavern
+keeps moving on</pre>
     </div>
   </div>
 
@@ -361,20 +499,66 @@ The atmosphere inside may differ from the one you arrived with.</div>
       artefactModal.setAttribute("aria-hidden", "false");
     });
 
-    function closeModal() {
+    function closeArtefactModal() {
       artefactModal.classList.remove("open");
       artefactModal.setAttribute("aria-hidden", "true");
     }
 
-    modalClose.addEventListener("click", closeModal);
+    modalClose.addEventListener("click", closeArtefactModal);
 
     artefactModal.addEventListener("click", (e) => {
-      if (e.target === artefactModal) closeModal();
+      if (e.target === artefactModal) closeArtefactModal();
+    });
+
+    const lyricsTrigger = document.getElementById("lyrics-trigger");
+    const lyricsModal = document.getElementById("lyrics-modal");
+    const lyricsClose = document.getElementById("lyrics-close");
+
+    lyricsTrigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      lyricsModal.classList.add("open");
+      lyricsModal.setAttribute("aria-hidden", "false");
+    });
+
+    function closeLyricsModal() {
+      lyricsModal.classList.remove("open");
+      lyricsModal.setAttribute("aria-hidden", "true");
+    }
+
+    lyricsClose.addEventListener("click", closeLyricsModal);
+
+    lyricsModal.addEventListener("click", (e) => {
+      if (e.target === lyricsModal) closeLyricsModal();
+    });
+
+    const audioToggle = document.getElementById("audio-toggle");
+    const templeAudio = document.getElementById("temple-audio");
+
+    audioToggle.addEventListener("click", async () => {
+      try {
+        if (templeAudio.paused) {
+          await templeAudio.play();
+          audioToggle.textContent = "signal active / pause transmission";
+          audioToggle.classList.add("playing");
+        } else {
+          templeAudio.pause();
+          audioToggle.textContent = "enter the temple";
+          audioToggle.classList.remove("playing");
+        }
+      } catch (err) {
+        console.error("Audio playback failed:", err);
+      }
+    });
+
+    templeAudio.addEventListener("ended", () => {
+      audioToggle.textContent = "enter the temple";
+      audioToggle.classList.remove("playing");
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && artefactModal.classList.contains("open")) {
-        closeModal();
+      if (e.key === "Escape") {
+        if (artefactModal.classList.contains("open")) closeArtefactModal();
+        if (lyricsModal.classList.contains("open")) closeLyricsModal();
       }
     });
   </script>
