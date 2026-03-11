@@ -316,14 +316,19 @@
 </head>
 <body>
 
-  <div id="boot-screen" aria-hidden="true">
-    <div class="boot-inner">
-      <div class="boot-title">Bloodlit Temple</div>
-      <div class="boot-line">
-        <span id="typed-text"></span><span class="cursor">|</span>
-      </div>
+<div id="boot-screen" aria-hidden="true">
+  <div class="boot-inner">
+    <div class="boot-title">Bloodlit Temple</div>
+
+    <div class="boot-line">
+      <span id="typed-text"></span><span class="cursor">|</span>
     </div>
+
+    <button id="enter-temple" class="temple-audio-button" style="margin-top:2rem; display:none;">
+      enter the temple
+    </button>
   </div>
+</div>
 
   <main id="main-content">
     <section class="hero">
@@ -384,6 +389,9 @@ The atmosphere inside may differ from the one you arrived with.</div>
     </section>
 
     <footer>bloodlit temple / archive active</footer>
+<audio id="temple-audio" preload="auto">
+  <source src="soundtrack.mp3" type="audio/mpeg">
+</audio>    
   </main>
 
   <audio id="temple-audio" preload="auto">
@@ -465,29 +473,42 @@ keeps moving on</pre>
   </div>
 
   <script>
-    const bootScreen = document.getElementById("boot-screen");
-    const mainContent = document.getElementById("main-content");
-    const typedText = document.getElementById("typed-text");
+const bootScreen = document.getElementById("boot-screen");
+const mainContent = document.getElementById("main-content");
+const typedText = document.getElementById("typed-text");
+const enterButton = document.getElementById("enter-temple");
+const templeAudio = document.getElementById("temple-audio");
 
-    const bootMessage = "system initializing...";
-    let i = 0;
+const bootMessage = ".initializing...";
+let i = 0;
 
-    function typeBootText() {
-      if (i < bootMessage.length) {
-        typedText.textContent += bootMessage.charAt(i);
-        i++;
-        setTimeout(typeBootText, 70);
-      } else {
-        setTimeout(() => {
-          bootScreen.classList.add("hidden");
-          mainContent.classList.add("visible");
-        }, 1200);
-      }
-    }
+function typeBootText() {
+  if (i < bootMessage.length) {
+    typedText.textContent += bootMessage.charAt(i);
+    i++;
+    setTimeout(typeBootText, 80);
+  } else {
+    setTimeout(() => {
+      enterButton.style.display = "inline-block";
+    }, 800);
+  }
+}
 
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(typeBootText, 500);
-    });
+window.addEventListener("DOMContentLoaded", () => {
+  setTimeout(typeBootText, 500);
+});
+
+enterButton.addEventListener("click", async () => {
+
+  try {
+    await templeAudio.play();
+  } catch (err) {
+    console.log("Audio blocked:", err);
+  }
+
+  bootScreen.classList.add("hidden");
+  mainContent.classList.add("visible");
+});
 
     const artefactTrigger = document.getElementById("artefact-trigger");
     const artefactModal = document.getElementById("artefact-modal");
