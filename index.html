@@ -586,6 +586,7 @@ It is the temple listening.
           bootScreen.classList.add("hidden");
           mainContent.classList.add("visible");
           initAmbientAudio();
+          startAmbientAudio();
         }, 1200);
       }
     }
@@ -637,15 +638,34 @@ It is the temple listening.
 
     const audioToggle = document.getElementById("audio-toggle");
 
+    function startAmbientAudio() {
+      if (!audioCtx || audioOn) return;
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      droneNodes = buildDrone();
+      audioOn = true;
+      audioToggle.textContent = "sound: on";
+      audioToggle.classList.add("on");
+    }
+
+    // Browser autoplay policy may block audio before first interaction.
+    // If auto-start was attempted but context is suspended, resume on first gesture.
+    function firstGestureResume() {
+      if (audioOn && audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      document.removeEventListener("click", firstGestureResume);
+      document.removeEventListener("touchstart", firstGestureResume);
+      document.removeEventListener("keydown", firstGestureResume);
+    }
+    document.addEventListener("click", firstGestureResume);
+    document.addEventListener("touchstart", firstGestureResume);
+    document.addEventListener("keydown", firstGestureResume);
+
     audioToggle.addEventListener("click", () => {
       if (!audioCtx) return;
 
       if (!audioOn) {
-        if (audioCtx.state === "suspended") audioCtx.resume();
-        droneNodes = buildDrone();
-        audioOn = true;
-        audioToggle.textContent = "sound: on";
-        audioToggle.classList.add("on");
+        startAmbientAudio();
       } else {
         droneNodes.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
         setTimeout(() => {
